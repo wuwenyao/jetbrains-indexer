@@ -16,6 +16,16 @@ Shared indexes are often hosted on a CDN and used by IDEs to speed up loading (i
         -v "$HOME/indexes-out":/shared-index \
         -e INDEXES_CDN_URL=http://localhost:3000/project \
         bencdr/indexer:idea-2021.3
+
+    docker run -it --rm  `
+        --add-host mgr.gzl.com.cn:10.3.41.35 `
+        -v ${pwd}:/var/project `
+        -v D:\wuwenyao\java\.m2:/root/.m2 `
+        -v D:\wuwenyao\java\.jdks:/root/.jdks `
+        -v D:\wuwenyao\JetBrains\indexes-out:/shared-index `
+        -e INDEXES_CDN_URL=http://localhost:3000/project `
+        -e PROJECT_ID=$("${pwd}".split("\")[-1]) `
+        indexer:idea-2022.3.2
         
     # you may need to fix the file permissions for the generated indexes
     sudo chown -R $(id -u):$(id -g) $HOME/indexes-out
