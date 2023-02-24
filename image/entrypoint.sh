@@ -1,4 +1,4 @@
-#/bin/sh
+do#/bin/sh
 
 # You can use the following environment variables at runtime
 # to skip steps in this script
@@ -24,13 +24,16 @@ if [ "$SKIP_GENERATE" = "false" ]; then
         --output=${SHARED_INDEX_BASE}/output
 fi
 
+# move shared index file to project subdirectory
+cp -r ${SHARED_INDEX_BASE}/output/. ${SHARED_INDEX_BASE}/project/output && \
+    rm -rf ${SHARED_INDEX_BASE}/output/
+
 # Format for CDN (cdn-layout-tool)
 if [ "$SKIP_FORMAT" = "false" ]; then
     echo_format "Formatting indexes"
     /opt/cdn-layout-tool/bin/cdn-layout-tool \
         --indexes-dir=${SHARED_INDEX_BASE} \
-        --url=${INDEXES_CDN_URL} && \
-        mv ${SHARED_INDEX_BASE}/output ${SHARED_INDEX_BASE}/project/output
+        --url=${INDEXES_CDN_URL%/project} 
 fi
 
 # Generate config file for project (your-project/intellij.yaml)
