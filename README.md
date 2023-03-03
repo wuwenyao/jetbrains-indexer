@@ -1,28 +1,33 @@
 # jetbrains-indexer
 
-Generate & package JetBrains [shared indexes](https://www.jetbrains.com/help/idea/shared-indexes.html) with a Docker container.
+Generate & package JetBrains d:[shared indexes](https://www.jetbrains.com/help/idea/shared-indexes.html) with a Docker container.
 
 Shared indexes are often hosted on a CDN and used by IDEs to speed up loading (indexing) time for JetBrains IDEs (IntelliJ IDEA, PyCharm, GoLand, etc). Blog post: <https://coder.com/blog/faster-jetbrains-ides-with-shared-indexes>
 
 ## Basic usage
 
 1.  Generate indexes for your project
-
+    ### linux
     ```sh
     cd your-project/
 
     docker run -it --rm \
         -v "$(pwd)":/var/project \
+        -v "$HOME/.m2":/root/.m2 \
+        -v "$HOME/.jdks":/root/.jdks \
         -v "$HOME/indexes-out":/shared-index \
         -e INDEXES_CDN_URL=http://localhost:3000/project \
-        bencdr/indexer:idea-2021.3
+        bencdr/indexer:idea-2021.3.2
+    ```
+    ### windows powershell
+    ```sh
 
     docker run -it --rm  `
         --add-host mgr.gzl.com.cn:10.3.41.35 `
-        -v ${pwd}:/var/project `
-        -v D:\wuwenyao\java\.m2:/root/.m2 `
-        -v D:\wuwenyao\java\.jdks:/root/.jdks `
-        -v D:\wuwenyao\JetBrains\indexes-out:/shared-index `
+        -v "${pwd}":/var/project `
+        -v "$HOME\.m2":/root/.m2" `
+        -v "$HOME\.jdks":/root/.jdks `
+        -v "$HOME\indexes-out":/shared-index `
         -e INDEXES_CDN_URL=http://localhost:3000/project `
         -e PROJECT_ID=$("${pwd}".split("\")[-1]) `
         indexer:idea-2022.3.2
